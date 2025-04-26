@@ -4,11 +4,11 @@
 // questions, and minigames into the interactive environment.
 
 #include <iostream>
+#include <map> // Include map for std::map
 #include "../journal/journalism.h"
 #include "../questions/questions.h"
 #include "../renderer/renderer.h"
 
-// Function to manage the main application flow
 void runApplication() {
     // Step 1: Handle journal entries
     const std::string journalFilePath = "journal_entries.txt";

@@ -78,9 +78,12 @@ unsigned int loadTexture(const std::string& path) {
     return textureID;
 }
 
-void renderScene() {
-    // Placeholder for rendering the 3D scene
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+void renderModelWithTexture(const std::string& modelPath, unsigned int textureID) {
+    // Placeholder for rendering a model with a texture
+    std::cout << "Rendering model: " << modelPath << " with texture ID: " << textureID << std::endl;
+}
 
-    // Add rendering logic for the pot, stem, and petals here
+void showGUI() {
+    // Placeholder for GUI logic
+    std::cout << "Displaying GUI (not yet implemented)" << std::endl;
 }

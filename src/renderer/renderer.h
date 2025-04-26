@@ -12,7 +12,10 @@ void loadModel(const std::string& path);
 // Function to load a texture
 unsigned int loadTexture(const std::string& path);
 
-// Function to render the 3D scene
-void renderScene();
+// Function to render a model with a texture
+void renderModelWithTexture(const std::string& modelPath, unsigned int textureID);
+
+// Function to display the GUI
+void showGUI();
 
 #endif
