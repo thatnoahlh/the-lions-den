@@ -9,33 +9,42 @@
 #include <iostream>
 #include <stdexcept>
 
-// Function to run the main application
 void runApplication() {
-    // Initialize OpenGL and the rendering context
     initializeOpenGL();
 
-    // Load models and textures
-    unsigned int model1 = loadModel("path/to/model1.obj");
-    unsigned int texture1 = loadTexture("path/to/texture1.png");
+    // Load models
+    unsigned int potModel = loadModel("./assets/3D_models/pot.obj");
+    unsigned int stemModel = loadModel("./assets/3D_models/stem.obj");
+    unsigned int petalModel = loadModel("./assets/3D_models/petal.obj");
 
-    unsigned int model2 = loadModel("path/to/model2.obj");
-    unsigned int texture2 = loadTexture("path/to/texture2.png");
+    // Load textures
+    unsigned int potTexture = loadTexture("./assets/textures/pot_texture.png");
+    unsigned int stemTexture = loadTexture("./assets/textures/stem_texture.png");
+    unsigned int petalBlueTexture = loadTexture("./assets/textures/petal_blue_texture.png");
+    unsigned int petalPinkTexture = loadTexture("./assets/textures/petal_pink_texture.png");
+    unsigned int petalRedTexture = loadTexture("./assets/textures/petal_red_texture.png");
+    unsigned int petalYellowTexture = loadTexture("./assets/textures/petal_yellow_texture.png");
 
     // Main rendering loop
     while (!shouldCloseWindow()) {
-        beginFrame(); // Clear and set up the frame
+        beginFrame();
 
-        // Render models with textures
-        renderModelWithTexture(model1, texture1);
-        renderModelWithTexture(model2, texture2);
+        // Render the pot
+        renderModelWithTexture(potModel, potTexture);
 
-        // Render GUI (if any)
+        // Render the stem
+        renderModelWithTexture(stemModel, stemTexture);
+
+        // Render petals with different textures
+        renderModelWithTexture(petalModel, petalBlueTexture);
+        renderModelWithTexture(petalModel, petalPinkTexture);
+        renderModelWithTexture(petalModel, petalRedTexture);
+        renderModelWithTexture(petalModel, petalYellowTexture);
+
         showGUI();
-
-        endFrame(); // Swap buffers and poll events
+        endFrame();
     }
 
-    // Clean up resources
     cleanupRenderer();
 }
 
