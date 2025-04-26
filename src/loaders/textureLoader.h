@@ -3,7 +3,7 @@
 
 #include <string>
 
-// Function to load a texture from a file
+// Declares the loadTexture function
 unsigned int loadTexture(const std::string& path);
 
 #endif // TEXTURELOADER_H

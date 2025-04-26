@@ -1,11 +1,16 @@
 #include "textureLoader.h"
 #include <iostream>
+#include <GL/glew.h>
 
-// Example implementation of loadTexture
 unsigned int loadTexture(const std::string& path) {
-    std::cout << "Loading texture from: " << path << std::endl;
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+    if (textureID == 0) {
+        std::cerr << "Error: Failed to generate texture for " << path << std::endl;
+        return 0;
+    }
 
-    // Placeholder: Replace this with actual texture loading logic
-    unsigned int textureID = 1; // Dummy value
+    // Add your texture loading logic here
+    std::cout << "Loaded texture ID: " << textureID << " from " << path << std::endl;
     return textureID;
 }
