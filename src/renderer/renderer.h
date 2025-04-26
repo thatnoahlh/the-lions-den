@@ -17,7 +17,7 @@ void endFrame();
 bool shouldCloseWindow();
 
 // Renders a model with the given texture
-void renderModelWithTexture(unsigned int modelID, unsigned int textureID, const glm::mat4& view, const glm::mat4& projection, const glm::vec3& lightPos, const glm::vec3& lightColor);
+void renderModelWithTexture(unsigned int modelID, unsigned int textureID, const glm::mat4& view, const glm::mat4& projection, const glm::vec3& lightPos, const glm::vec3& lightColor, const glm::mat4& model);
 
 // Renders the GUI
 void showGUI();

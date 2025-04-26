@@ -1,4 +1,3 @@
-// main.cpp
 //
 // This is the entry point for the 3D scene. It integrates the journal,
 // questions, and minigames into the interactive environment.
@@ -14,28 +13,6 @@
 #include <glm/gtc/matrix_transform.hpp> // For glm::lookAt, glm::perspective
 #include <glm/gtc/type_ptr.hpp>         // For glm::value_ptr
 
-// Vertex and index data for models
-std::vector<float> potVertexData = {
-    // Add your pot vertex data here
-};
-std::vector<unsigned int> potIndices = {
-    // Add your pot index data here
-};
-
-std::vector<float> stemVertexData = {
-    // Add your stem vertex data here
-};
-std::vector<unsigned int> stemIndices = {
-    // Add your stem index data here
-};
-
-std::vector<float> petalVertexData = {
-    // Add your petal vertex data here
-};
-std::vector<unsigned int> petalIndices = {
-    // Add your petal index data here
-};
-
 // Global VAOs and texture IDs
 unsigned int potVAO, stemVAO, petalVAO;
 unsigned int potTextureID, stemTextureID, petalTextureID;
@@ -43,6 +20,20 @@ unsigned int potTextureID, stemTextureID, petalTextureID;
 // Main application logic
 void runApplication() {
     initializeOpenGL();
+
+    // Load models
+    std::vector<float> potVertexData, stemVertexData, petalVertexData;
+    std::vector<unsigned int> potIndices, stemIndices, petalIndices;
+
+    if (!loadModel("./assets/3D_models/pot.obj", potVertexData, potIndices)) {
+        throw std::runtime_error("Failed to load pot model");
+    }
+    if (!loadModel("./assets/3D_models/stem.obj", stemVertexData, stemIndices)) {
+        throw std::runtime_error("Failed to load stem model");
+    }
+    if (!loadModel("./assets/3D_models/petal.obj", petalVertexData, petalIndices)) {
+        throw std::runtime_error("Failed to load petal model");
+    }
 
     // Initialize VAOs
     potVAO = initializeModel(potVertexData, potIndices);
@@ -78,15 +69,15 @@ void runApplication() {
     while (!shouldCloseWindow()) {
         beginFrame();
 
-        if (glIsVertexArray(potVAO) == GL_FALSE || glIsVertexArray(stemVAO) == GL_FALSE || glIsVertexArray(petalVAO) == GL_FALSE) {
-            std::cerr << "Error: One or more VAOs are invalid. Exiting rendering loop." << std::endl;
-            break;
-        }
-
         // Render each model
-        renderModelWithTexture(potVAO, potTextureID, view, projection, lightPos, lightColor);
-        renderModelWithTexture(stemVAO, stemTextureID, view, projection, lightPos, lightColor);
-        renderModelWithTexture(petalVAO, petalTextureID, view, projection, lightPos, lightColor);
+        glm::mat4 potModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 0.0f)); // Translate the pot
+        renderModelWithTexture(potVAO, potTextureID, view, projection, lightPos, lightColor, potModel);
+
+        glm::mat4 stemModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)); // Position the stem
+        renderModelWithTexture(stemVAO, stemTextureID, view, projection, lightPos, lightColor, stemModel);
+
+        glm::mat4 petalModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Position the petal
+        renderModelWithTexture(petalVAO, petalTextureID, view, projection, lightPos, lightColor, petalModel);
 
         endFrame();
 

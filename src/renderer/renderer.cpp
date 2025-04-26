@@ -107,13 +107,15 @@ unsigned int initializeModel(const std::vector<float>& vertexData, const std::ve
     return VAO;
 }
 
-void renderModelWithTexture(unsigned int modelID, unsigned int textureID, const glm::mat4& view, const glm::mat4& projection, const glm::vec3& lightPos, const glm::vec3& lightColor) {
+void renderModelWithTexture(unsigned int modelID, unsigned int textureID, const glm::mat4& view, const glm::mat4& projection, const glm::vec3& lightPos, const glm::vec3& lightColor, const glm::mat4& model) {
     if (glIsVertexArray(modelID) == GL_FALSE) {
         std::cerr << "Error: Invalid VAO ID " << modelID << ". Skipping rendering." << std::endl;
         return;
     }
 
     glUseProgram(shaderProgram);
+
+    setShaderUniform("model", model);
     setShaderUniform("view", view);
     setShaderUniform("projection", projection);
     setShaderUniform("lightPos", lightPos);
@@ -123,7 +125,7 @@ void renderModelWithTexture(unsigned int modelID, unsigned int textureID, const 
     glBindTexture(GL_TEXTURE_2D, textureID);
 
     glBindVertexArray(modelID);
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0); // Ensure the count matches your indices
     glBindVertexArray(0);
 }
 
