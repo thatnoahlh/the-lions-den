@@ -1,21 +1,25 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include <string>
-
-// Function to initialize OpenGL and the rendering environment
+// Initializes OpenGL and the rendering context
 void initializeOpenGL();
 
-// Function to load a 3D model
-void loadModel(const std::string& path);
+// Prepares the frame for rendering
+void beginFrame();
 
-// Function to load a texture
-unsigned int loadTexture(const std::string& path);
+// Finalizes the frame and swaps buffers
+void endFrame();
 
-// Function to render a model with a texture
-void renderModelWithTexture(const std::string& modelPath, unsigned int textureID);
+// Checks if the rendering window should close
+bool shouldCloseWindow();
 
-// Function to display the GUI
+// Renders a model with the given texture
+void renderModelWithTexture(unsigned int modelID, unsigned int textureID);
+
+// Renders the GUI
 void showGUI();
 
-#endif
+// Cleans up the rendering resources
+void cleanupRenderer();
+
+#endif // RENDERER_H

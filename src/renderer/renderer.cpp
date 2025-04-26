@@ -1,89 +1,74 @@
 #include "renderer.h"
-#include <iostream>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include "stb_image.h"
-#include <glad/glad.h>
+#include <GL/gl.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
+
+// Global variables for the rendering context
+static GLFWwindow* window = nullptr;
 
 void initializeOpenGL() {
     // Initialize GLFW
     if (!glfwInit()) {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
-        return;
+        throw std::runtime_error("Failed to initialize GLFW");
     }
 
-    // Create a GLFW window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "3D Flower Environment", nullptr, nullptr);
+    // Configure OpenGL context
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // OpenGL 3.3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    // Create a window
+    window = glfwCreateWindow(800, 600, "OpenGL Window", nullptr, nullptr);
     if (!window) {
-        std::cerr << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
-        return;
+        throw std::runtime_error("Failed to create GLFW window");
     }
 
+    // Make the OpenGL context current
     glfwMakeContextCurrent(window);
 
-    // Initialize GLAD
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
-        return;
-    }
-
-    // Set OpenGL viewport
-    glViewport(0, 0, 800, 600);
-    glEnable(GL_DEPTH_TEST);
+    // Print OpenGL version info
+    const GLubyte* renderer = glGetString(GL_RENDERER);
+    const GLubyte* version = glGetString(GL_VERSION);
+    std::cout << "Renderer: " << renderer << std::endl;
+    std::cout << "OpenGL version supported: " << version << std::endl;
 }
 
-void loadModel(const std::string& path) {
-    Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
-
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        std::cerr << "Error loading model: " << importer.GetErrorString() << std::endl;
-        return;
-    }
-
-    std::cout << "Successfully loaded model: " << path << std::endl;
-
-    // Process the model (expand this function to handle meshes, materials, etc.)
+void beginFrame() {
+    // Clear the screen and prepare for rendering
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-unsigned int loadTexture(const std::string& path) {
-    unsigned int textureID;
-    glGenTextures(1, &textureID);
-
-    int width, height, nrChannels;
-    unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-
-    if (data) {
-        GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        // Set texture parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        stbi_image_free(data);
-        std::cout << "Successfully loaded texture: " << path << std::endl;
-    } else {
-        std::cerr << "Failed to load texture: " << path << std::endl;
-        stbi_image_free(data);
-    }
-
-    return textureID;
+void endFrame() {
+    // Swap buffers and poll for events
+    glfwSwapBuffers(window);
+    glfwPollEvents();
 }
 
-void renderModelWithTexture(const std::string& modelPath, unsigned int textureID) {
-    // Placeholder for rendering a model with a texture
-    std::cout << "Rendering model: " << modelPath << " with texture ID: " << textureID << std::endl;
+bool shouldCloseWindow() {
+    // Check if the window should close
+    return glfwWindowShouldClose(window);
+}
+
+void renderModelWithTexture(unsigned int modelID, unsigned int textureID) {
+    // Bind the texture
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    // Render the model (pseudo-code, actual implementation depends on your model and rendering logic)
+    glBegin(GL_TRIANGLES);
+    // Add vertex data here
+    glEnd();
 }
 
 void showGUI() {
-    // Placeholder for GUI logic
-    std::cout << "Displaying GUI (not yet implemented)" << std::endl;
+    // Render GUI components (e.g., ImGui if used)
+    // Placeholder function
+}
+
+void cleanupRenderer() {
+    // Clean up GLFW and other resources
+    if (window) {
+        glfwDestroyWindow(window);
+    }
+    glfwTerminate();
 }
