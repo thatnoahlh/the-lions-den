@@ -19,11 +19,7 @@ int main() {
     handleJournalEntries(journalFilePath);
 
     // Step 2: Ask questions
-    std::vector<Question> questions = {
-        {"What helps you relax?", {"Meditation", "Exercise", "Reading", "Music"}},
-        {"What is your favorite color?", {"Red", "Blue", "Yellow", "Pink"}},
-        // Add more questions as needed
-    };
+    std::vector<Question> questions = getQuestions();
     std::string answers = askQuestions(questions);
     generatePetals(answers);
 
