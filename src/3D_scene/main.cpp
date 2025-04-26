@@ -3,9 +3,9 @@
 // This is the entry point for the 3D scene. It integrates the journal,
 // questions, and minigames into the interactive environment.
 
+#include "../journal/journalism.h"
+#include "../questions/questions.h"
 #include <iostream>
-#include "../journal/journalism.cpp"
-#include "../questions/questions.cpp"
 
 void show3DEnvironment() {
     std::cout << "Launching 3D environment...\n";

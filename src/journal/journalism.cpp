@@ -1,14 +1,7 @@
 // journal.cpp
+#include "journalism.h"
 #include <iostream>
 #include <fstream>
-#include <string>
-#include <vector>
-
-struct JournalEntry {
-    std::string date;
-    std::string title;
-    std::string content;
-};
 
 void displayPreviousEntries(const std::vector<JournalEntry>& entries) {
     if (entries.empty()) {

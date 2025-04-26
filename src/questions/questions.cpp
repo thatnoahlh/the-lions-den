@@ -1,12 +1,6 @@
 // questions.cpp
+#include "questions.h"
 #include <iostream>
-#include <vector>
-#include <string>
-
-struct Question {
-    std::string text;
-    std::vector<std::string> choices;
-};
 
 std::vector<Question> getQuestions() {
     return {
