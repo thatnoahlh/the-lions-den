@@ -64,6 +64,9 @@ void runApplication() {
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);
 
+    // Disable face culling to render both front and back faces
+    glDisable(GL_CULL_FACE);
+
     // Camera setup
     glm::vec3 cameraPos(0.0f, 0.0f, 5.0f); // Use this for viewPos
 
