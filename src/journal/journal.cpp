@@ -11,6 +11,11 @@ struct JournalEntry {
 };
 
 void displayPreviousEntries(const std::vector<JournalEntry>& entries) {
+    if (entries.empty()) {
+        std::cout << "No previous journal entries found.\n";
+        return;
+    }
+
     std::cout << "Previous Journal Entries:\n";
     for (const auto& entry : entries) {
         std::cout << "[" << entry.date << "] " << entry.title << "\n";
