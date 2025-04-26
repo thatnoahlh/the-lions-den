@@ -7,9 +7,9 @@ in vec3 Normal;
 out vec4 FragColor;
 
 uniform sampler2D texture1;
-uniform vec3 lightPos;  // Position of the light source
-uniform vec3 lightColor; // Color of the light
-uniform vec3 viewPos;   // Position of the camera
+uniform vec3 lightPos;
+uniform vec3 lightColor;
+uniform vec3 viewPos;
 
 void main() {
     // Ambient lighting

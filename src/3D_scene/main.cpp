@@ -75,9 +75,9 @@ void runApplication() {
         useShaderProgram();
     
         // Set lighting uniforms
-        setShaderUniform("lightPos", lightPos);
-        setShaderUniform("lightColor", lightColor);
-        setShaderUniform("viewPos", cameraPos);
+        setShaderUniform("lightPos", lightPos);       // Light position
+        setShaderUniform("lightColor", lightColor);  // Light color
+        setShaderUniform("viewPos", cameraPos);      // Camera position
     
         // Render each model
         glm::mat4 potModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
