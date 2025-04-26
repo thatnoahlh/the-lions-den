@@ -79,12 +79,6 @@ unsigned int initializeModel(const std::vector<float>& vertexData, const std::ve
     unsigned int VAO, VBO, EBO;
 
     glGenVertexArrays(1, &VAO);
-    if (VAO == 0) {
-        std::cerr << "Error: Failed to generate VAO" << std::endl;
-    } else {
-        std::cout << "Generated VAO ID: " << VAO << std::endl;
-    }
-
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
 
@@ -96,11 +90,17 @@ unsigned int initializeModel(const std::vector<float>& vertexData, const std::ve
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    // Vertex positions
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    // Texture coordinates
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    // Normals
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
 
@@ -129,6 +129,17 @@ void renderModelWithTexture(unsigned int modelID, unsigned int textureID, const 
     glBindVertexArray(0);
 }
 
+std::string loadShaderFromFile(const std::string& filePath) {
+    std::ifstream file(filePath);
+    if (!file.is_open()) {
+        throw std::runtime_error("Failed to open shader file: " + filePath);
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    return buffer.str();
+}
+
 // Helper function to compile a shader
 unsigned int compileShader(const char* source, GLenum shaderType) {
     unsigned int shader = glCreateShader(shaderType);
@@ -150,42 +161,12 @@ unsigned int compileShader(const char* source, GLenum shaderType) {
 
 // Function to initialize the shader program
 void initializeShaderProgram() {
-    const char* vertexShaderSource = R"(
-        #version 130
+    std::string vertexShaderSource = loadShaderFromFile("assets/shaders/vertex_shader.glsl");
+    std::string fragmentShaderSource = loadShaderFromFile("assets/shaders/fragment_shader.glsl");
 
-        in vec3 aPos;
-        in vec2 aTexCoord;
+    unsigned int vertexShader = compileShader(vertexShaderSource.c_str(), GL_VERTEX_SHADER);
+    unsigned int fragmentShader = compileShader(fragmentShaderSource.c_str(), GL_FRAGMENT_SHADER);
 
-        uniform mat4 model;
-        uniform mat4 view;
-        uniform mat4 projection;
-
-        out vec2 TexCoord;
-
-        void main() {
-            gl_Position = projection * view * model * vec4(aPos, 1.0);
-            TexCoord = aTexCoord;
-        }
-    )";
-
-    const char* fragmentShaderSource = R"(
-        #version 130
-
-        in vec2 TexCoord;
-        out vec4 FragColor;
-
-        uniform sampler2D texture1;
-
-        void main() {
-            FragColor = texture(texture1, TexCoord);
-        }
-    )";
-
-    // Compile shaders
-    unsigned int vertexShader = compileShader(vertexShaderSource, GL_VERTEX_SHADER);
-    unsigned int fragmentShader = compileShader(fragmentShaderSource, GL_FRAGMENT_SHADER);
-
-    // Link shaders into a program
     shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
@@ -201,7 +182,6 @@ void initializeShaderProgram() {
         throw std::runtime_error("Shader linking failed");
     }
 
-    // Clean up shaders (they're no longer needed after linking)
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 

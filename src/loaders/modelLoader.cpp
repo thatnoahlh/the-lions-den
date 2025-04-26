@@ -35,6 +35,10 @@ bool loadModel(const std::string& filePath, std::vector<float>& vertexData, std:
     // Extract index data
     for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
         const aiFace& face = mesh->mFaces[i];
+        // Extract normals
+        vertexData.push_back(mesh->mNormals[i].x);
+        vertexData.push_back(mesh->mNormals[i].y);
+        vertexData.push_back(mesh->mNormals[i].z);
         for (unsigned int j = 0; j < face.mNumIndices; j++) {
             indices.push_back(face.mIndices[j]);
         }

@@ -64,28 +64,32 @@ void runApplication() {
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);
 
+    // Camera setup
+    glm::vec3 cameraPos(0.0f, 0.0f, 5.0f); // Use this for viewPos
+
     // Main rendering loop
     int frameCount = 0;
     while (!shouldCloseWindow()) {
         beginFrame();
-
+    
+        useShaderProgram();
+    
+        // Set lighting uniforms
+        setShaderUniform("lightPos", lightPos);
+        setShaderUniform("lightColor", lightColor);
+        setShaderUniform("viewPos", cameraPos);
+    
         // Render each model
-        glm::mat4 potModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 0.0f)); // Translate the pot
+        glm::mat4 potModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
         renderModelWithTexture(potVAO, potTextureID, view, projection, lightPos, lightColor, potModel);
-
-        glm::mat4 stemModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)); // Position the stem
+    
+        glm::mat4 stemModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
         renderModelWithTexture(stemVAO, stemTextureID, view, projection, lightPos, lightColor, stemModel);
-
-        glm::mat4 petalModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Position the petal
+    
+        glm::mat4 petalModel = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         renderModelWithTexture(petalVAO, petalTextureID, view, projection, lightPos, lightColor, petalModel);
-
+    
         endFrame();
-
-        frameCount++;
-        if (frameCount > 4000) { // Avoid infinite loop for debugging purposes
-            std::cerr << "Exceeded maximum frame count. Exiting rendering loop." << std::endl;
-            break;
-        }
     }
 
     cleanupRenderer();

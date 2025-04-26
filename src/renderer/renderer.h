@@ -3,6 +3,10 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <string>
+
+// Function to load a shader from a file
+std::string loadShaderFromFile(const std::string& filePath);
 
 // Initializes OpenGL and the rendering context
 void initializeOpenGL();
@@ -38,7 +42,7 @@ void useShaderProgram();
 void drawModel(unsigned int modelID);
 
 // Initializes the shader program
-void initializeShaderProgram(); // Add this declaration
+void initializeShaderProgram();
 
 // Initializes a model with vertex and index data
 unsigned int initializeModel(const std::vector<float>& vertexData, const std::vector<unsigned int>& indices);
